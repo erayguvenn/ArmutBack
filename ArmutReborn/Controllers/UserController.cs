@@ -1,4 +1,5 @@
 ﻿using ArmutReborn.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArmutReborn.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -18,11 +20,18 @@ namespace ArmutReborn.Controllers
         }
 
         // GET: api/<UserController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
+        [HttpGet("me")]
+        public async Task<ActionResult<User>> GetMe()
         {
-            var users = await _context.Users.ToListAsync();
-            return users;
+            uint userId = uint.Parse(User.FindFirst("userId").Value);
+            var user = await _context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
         }
 
         // GET api/<UserController>/5
@@ -34,11 +43,12 @@ namespace ArmutReborn.Controllers
             if(userWithSameId == null) return NotFound();
             return userWithSameId;
         }
-
+     
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+                
         }
 
         // DELETE api/<UserController>/5

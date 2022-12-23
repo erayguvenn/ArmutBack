@@ -7,7 +7,6 @@ namespace ArmutReborn.Models
     {
         public Workcategory()
         {
-            InverseParent = new HashSet<Workcategory>();
             WorkListings = new HashSet<WorkListing>();
         }
 
@@ -17,7 +16,6 @@ namespace ArmutReborn.Models
         public string RuleTemplate { get; set; } = null!;
 
         public virtual Workcategory? Parent { get; set; }
-        public virtual ICollection<Workcategory> InverseParent { get; set; }
         public virtual ICollection<WorkListing> WorkListings { get; set; }
     }
 }

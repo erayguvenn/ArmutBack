@@ -29,7 +29,18 @@ namespace ArmutReborn.Controllers
             if(userWithSameEmail != null) return BadRequest(new {Message="Bu email zaten kullanılıyor"});
 
             User newUser = new User { CreatedAt = DateTime.Now, Email = value.Email, Name = value.Name, Surname = value.Surname, PhoneNumber = value.PhoneNumber, Password = value.Password };
+
+            if (value.UserType =="worker" )
+            {
+                Worker worker = new Worker { Adress = value.Adress };
+                worker.User = newUser;
+                _context.Workers.Add(worker);
+
+            }
             _context.Users.Add(newUser);
+
+
+
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Ok" });
@@ -44,6 +55,7 @@ namespace ArmutReborn.Controllers
             User userToLogIn = await _context.Users.Where(user => user.Email == value.Email && user.Password == value.Password).FirstOrDefaultAsync();
             if (userToLogIn == null) return BadRequest();
 
+
             var claims = new List<Claim>
             {
                 new Claim("userId", userToLogIn.Id.ToString()),
@@ -56,7 +68,9 @@ namespace ArmutReborn.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
 
-            return Ok(new { Message = "Ok" });
+            //return Ok(new { Message = "Ok"});
+            return Ok(userToLogIn.Id);
         }
+
     }
 }
