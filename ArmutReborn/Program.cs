@@ -10,7 +10,7 @@ namespace ArmutReborn
     {
         public static void Main(string[] args)
         {
-            string remoteConnectionString = "server=34.127.86.147;uid=armut;pwd=eray;database=Armut";
+            string remoteConnectionString = "server=3.127.53.229;uid=Eray;pwd=armut;database=Armut";
             var builder = WebApplication.CreateBuilder(args);
 
 
