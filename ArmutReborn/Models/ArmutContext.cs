@@ -16,6 +16,7 @@ namespace ArmutReborn.Models
         {
         }
 
+        public virtual DbSet<Bid> Bids { get; set; } = null!;
         public virtual DbSet<Job> Jobs { get; set; } = null!;
         public virtual DbSet<Rating> Ratings { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
@@ -23,12 +24,65 @@ namespace ArmutReborn.Models
         public virtual DbSet<Workcategory> Workcategories { get; set; } = null!;
         public virtual DbSet<Worker> Workers { get; set; } = null!;
 
-       
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseMySql("server=3.127.53.229;uid=Eray;pwd=armut;database=Armut", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.11-mariadb"));
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseCollation("utf8mb4_general_ci")
                 .HasCharSet("utf8mb4");
+
+            modelBuilder.Entity<Bid>(entity =>
+            {
+                entity.ToTable("bid");
+
+                entity.HasIndex(e => e.WorkerId, "worker_id");
+
+                entity.HasIndex(e => e.WorklistingId, "worklisting_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Accepted).HasColumnName("accepted");
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("timestamp")
+                    .HasColumnName("createTime")
+                    .HasDefaultValueSql("current_timestamp()");
+
+                entity.Property(e => e.Message)
+                    .HasMaxLength(2000)
+                    .HasColumnName("message");
+
+                entity.Property(e => e.Price)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("price");
+
+                entity.Property(e => e.WorkerId)
+                    .HasColumnType("int(11) unsigned")
+                    .HasColumnName("worker_id");
+
+                entity.Property(e => e.WorklistingId)
+                    .HasColumnType("int(11) unsigned")
+                    .HasColumnName("worklisting_id");
+
+                entity.HasOne(d => d.Worker)
+                    .WithMany(p => p.Bids)
+                    .HasForeignKey(d => d.WorkerId)
+                    .HasConstraintName("bid_ibfk_1");
+
+                entity.HasOne(d => d.Worklisting)
+                    .WithMany(p => p.Bids)
+                    .HasForeignKey(d => d.WorklistingId)
+                    .HasConstraintName("bid_ibfk_2");
+            });
 
             modelBuilder.Entity<Job>(entity =>
             {
@@ -46,7 +100,7 @@ namespace ArmutReborn.Models
                     .HasColumnType("timestamp")
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("create_at")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.EmployerId)
                     .HasColumnType("int(10) unsigned")
@@ -91,7 +145,7 @@ namespace ArmutReborn.Models
                     .HasColumnType("timestamp")
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("created_at")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.JobId)
                     .HasColumnType("int(10) unsigned")
@@ -123,11 +177,9 @@ namespace ArmutReborn.Models
                     .HasColumnType("timestamp")
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("created_at")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("current_timestamp()");
 
-                entity.Property(e => e.Email)
-                    .HasMaxLength(255)
-                    .HasColumnName("email");
+                entity.Property(e => e.Email).HasColumnName("email");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -147,16 +199,17 @@ namespace ArmutReborn.Models
 
                 entity.Property(e => e.UserType)
                     .HasColumnType("enum('admin','user','worker')")
-                    .HasColumnName("user_type");
+                    .HasColumnName("user_type")
+                    .HasDefaultValueSql("'user'");
             });
 
             modelBuilder.Entity<WorkListing>(entity =>
             {
                 entity.ToTable("work_listing");
 
-                entity.HasIndex(e => e.CategoryId, "work_listing_category_id_foreign");
+                entity.HasIndex(e => e.UserId, "user_id");
 
-                entity.HasIndex(e => e.WorkerId, "work_listing_worker_id_foreign");
+                entity.HasIndex(e => e.CategoryId, "work_listing_category_id_foreign");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(10) unsigned")
@@ -170,7 +223,7 @@ namespace ArmutReborn.Models
                     .HasColumnType("timestamp")
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("created_at")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.RuleFill)
                     .HasColumnName("rule_fill")
@@ -178,11 +231,12 @@ namespace ArmutReborn.Models
 
                 entity.Property(e => e.State)
                     .HasColumnType("enum('waiting_approval','approved','rejected')")
-                    .HasColumnName("state");
+                    .HasColumnName("state")
+                    .HasDefaultValueSql("'waiting_approval'");
 
-                entity.Property(e => e.WorkerId)
+                entity.Property(e => e.UserId)
                     .HasColumnType("int(10) unsigned")
-                    .HasColumnName("worker_id");
+                    .HasColumnName("user_id");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.WorkListings)
@@ -190,11 +244,10 @@ namespace ArmutReborn.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("work_listing_category_id_foreign");
 
-                entity.HasOne(d => d.Worker)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.WorkListings)
-                    .HasForeignKey(d => d.WorkerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("work_listing_worker_id_foreign");
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("work_listing_ibfk_1");
             });
 
             modelBuilder.Entity<Workcategory>(entity =>
@@ -220,7 +273,7 @@ namespace ArmutReborn.Models
                     .UseCollation("utf8mb4_bin");
 
                 entity.HasOne(d => d.Parent)
-                    .WithMany()
+                    .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("workcategory_parent_id_foreign");
             });
@@ -243,7 +296,7 @@ namespace ArmutReborn.Models
                     .HasColumnType("timestamp")
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("created_at")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    .HasDefaultValueSql("current_timestamp()");
 
                 entity.Property(e => e.UserId)
                     .HasColumnType("int(10) unsigned")

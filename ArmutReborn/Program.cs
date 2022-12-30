@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace ArmutReborn
 {
@@ -52,8 +53,10 @@ namespace ArmutReborn
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors());
 
-
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

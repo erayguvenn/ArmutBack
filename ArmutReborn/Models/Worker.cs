@@ -7,7 +7,7 @@ namespace ArmutReborn.Models
     {
         public Worker()
         {
-            WorkListings = new HashSet<WorkListing>();
+            Bids = new HashSet<Bid>();
         }
 
         public uint Id { get; set; }
@@ -16,6 +16,6 @@ namespace ArmutReborn.Models
         public DateTime CreatedAt { get; set; }
 
         public virtual User User { get; set; } = null!;
-        public virtual ICollection<WorkListing> WorkListings { get; set; }
+        public virtual ICollection<Bid> Bids { get; set; }
     }
 }
