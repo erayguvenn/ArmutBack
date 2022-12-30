@@ -11,14 +11,14 @@ namespace ArmutReborn.Models
         }
 
         public uint Id { get; set; }
-        public uint WorkerId { get; set; }
+        public uint? WorkerId { get; set; } = null!;
         public uint CategoryId { get; set; }
         public string State { get; set; } = null!;
         public string RuleFill { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
 
         public virtual Workcategory Category { get; set; } = null!;
-        public virtual Worker Worker { get; set; } = null!;
+        public virtual Worker? Worker { get; set; } = null!;
         public virtual ICollection<Job> Jobs { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace ArmutReborn.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Workcategory>>> GetWorkcategories()
         {
-            
+           
             return await _context.Workcategories.ToListAsync();
         }
 
