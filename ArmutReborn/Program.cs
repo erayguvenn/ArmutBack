@@ -14,10 +14,10 @@ namespace ArmutReborn
             string remoteConnectionString = "server=3.127.53.229;uid=Eray;pwd=armut;database=Armut";
             var builder = WebApplication.CreateBuilder(args);
 
-
+            builder.WebHost.UseUrls("https://localhost:7058", "http://localhost:5058","https://*:7058", "http://*:5058");
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:4200")
+                builder.WithOrigins("http://localhost:4200","*")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
@@ -61,7 +61,7 @@ namespace ArmutReborn
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-
+            Console.WriteLine(app.Urls);
 
             app.UseCors("MyPolicy");
 
@@ -72,7 +72,7 @@ namespace ArmutReborn
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
 
 

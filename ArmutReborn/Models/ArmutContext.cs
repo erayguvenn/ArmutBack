@@ -18,6 +18,7 @@ namespace ArmutReborn.Models
 
         public virtual DbSet<Bid> Bids { get; set; } = null!;
         public virtual DbSet<Job> Jobs { get; set; } = null!;
+        public virtual DbSet<Message> Messages { get; set; } = null!;
         public virtual DbSet<Rating> Ratings { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<WorkListing> WorkListings { get; set; } = null!;
@@ -125,6 +126,55 @@ namespace ArmutReborn.Models
                     .HasForeignKey(d => d.WorkListingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("job_work_listing_id_foreign");
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.ToTable("message");
+
+                entity.HasIndex(e => e.AlanId, "alanId");
+
+                entity.HasIndex(e => e.BidId, "bidId");
+
+                entity.HasIndex(e => e.GonderenId, "gonderenId");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasColumnName("id");
+
+                entity.Property(e => e.AlanId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("alanId");
+
+                entity.Property(e => e.BidId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("bidId");
+
+                entity.Property(e => e.Content).HasColumnName("content");
+
+                entity.Property(e => e.GonderenId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("gonderenId");
+
+                entity.Property(e => e.SentDate)
+                    .HasColumnType("timestamp")
+                    .HasColumnName("sentDate")
+                    .HasDefaultValueSql("current_timestamp()");
+
+                entity.HasOne(d => d.Alan)
+                    .WithMany(p => p.MessageAlans)
+                    .HasForeignKey(d => d.AlanId)
+                    .HasConstraintName("message_ibfk_2");
+
+                entity.HasOne(d => d.Bid)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.BidId)
+                    .HasConstraintName("message_ibfk_3");
+
+                entity.HasOne(d => d.Gonderen)
+                    .WithMany(p => p.MessageGonderens)
+                    .HasForeignKey(d => d.GonderenId)
+                    .HasConstraintName("message_ibfk_1");
             });
 
             modelBuilder.Entity<Rating>(entity =>

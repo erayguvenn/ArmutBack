@@ -27,5 +27,15 @@ namespace ArmutReborn.Controllers
 
             return Ok(worker.Select(worker => WorkerDTO.ToDTO(worker)).ToList());
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Worker>>> gerWorkerUserId([FromQuery] int? workerId)
+        {
+            var worker = await _context.Workers.Include(worker => worker.User).Where(b => b.Id == workerId).FirstOrDefaultAsync();
+
+            if (worker == null) return NotFound();
+
+            return Ok(worker);
+        }
     }
 }

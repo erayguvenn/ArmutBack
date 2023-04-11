@@ -5,6 +5,11 @@ namespace ArmutReborn.Models
 {
     public partial class Bid
     {
+        public Bid()
+        {
+            Messages = new HashSet<Message>();
+        }
+
         public uint Id { get; set; }
         public uint WorklistingId { get; set; }
         public uint WorkerId { get; set; }
@@ -15,5 +20,6 @@ namespace ArmutReborn.Models
 
         public virtual Worker Worker { get; set; } = null!;
         public virtual WorkListing Worklisting { get; set; } = null!;
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

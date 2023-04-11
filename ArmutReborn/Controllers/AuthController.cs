@@ -1,7 +1,7 @@
 ﻿using ArmutReborn.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
@@ -72,5 +72,20 @@ namespace ArmutReborn.Controllers
             return Ok(userToLogIn.Id);
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<ActionResult> Logout()
+        {
+
+            Response.Cookies.Delete("session", new CookieOptions()
+            {
+                HttpOnly = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.None,
+                Secure = true
+            });
+
+            return Ok();
+        }
     }
 }

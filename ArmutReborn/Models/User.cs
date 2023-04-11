@@ -8,6 +8,8 @@ namespace ArmutReborn.Models
         public User()
         {
             Jobs = new HashSet<Job>();
+            MessageAlans = new HashSet<Message>();
+            MessageGonderens = new HashSet<Message>();
             WorkListings = new HashSet<WorkListing>();
             Workers = new HashSet<Worker>();
         }
@@ -22,6 +24,8 @@ namespace ArmutReborn.Models
         public DateTime CreatedAt { get; set; }
 
         public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Message> MessageAlans { get; set; }
+        public virtual ICollection<Message> MessageGonderens { get; set; }
         public virtual ICollection<WorkListing> WorkListings { get; set; }
         public virtual ICollection<Worker> Workers { get; set; }
     }
