@@ -1,7 +1,6 @@
 using ArmutReborn.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -14,11 +13,11 @@ namespace ArmutReborn
             string remoteConnectionString = "server=3.127.53.229;uid=Eray;pwd=armut;database=Armut";
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.WebHost.UseUrls("http://localhost:60001", "http://*:60001");
-           /* builder.WebHost.UseUrls("https://localhost:7058", "http://localhost:5058", "https://*:7058", "http://*:5058");*/
+            builder.WebHost.UseUrls("http://0.0.0.0:60001");
+            /* builder.WebHost.UseUrls("https://localhost:7058", "http://localhost:5058", "https://*:7058", "http://*:5058");*/
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:4200","*")
+                builder.WithOrigins("http://localhost:4200", "*")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
@@ -54,7 +53,8 @@ namespace ArmutReborn
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors());
 
-            builder.Services.AddControllers().AddJsonOptions(options => {
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
@@ -73,7 +73,7 @@ namespace ArmutReborn
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
             app.UseHttpsRedirection();
 
 
