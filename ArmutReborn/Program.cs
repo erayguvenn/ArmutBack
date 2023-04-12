@@ -35,7 +35,7 @@ namespace ArmutReborn
                   options.Cookie.HttpOnly = true;
                   options.Cookie.IsEssential = true;
                   options.Cookie.SameSite = SameSiteMode.None;
-                  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                  options.Cookie.SecurePolicy = CookieSecurePolicy.None;
               });
 
             builder.Services.Configure<CookiePolicyOptions>(options =>
