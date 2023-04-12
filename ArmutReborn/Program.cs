@@ -13,11 +13,11 @@ namespace ArmutReborn
             string remoteConnectionString = "server=3.127.53.229;uid=Eray;pwd=armut;database=Armut";
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.WebHost.UseUrls("http://0.0.0.0:60001","https://0.0.0.0:60000");
+            builder.WebHost.UseUrls("http://0.0.0.0:60001");
             /* builder.WebHost.UseUrls("https://localhost:7058", "http://localhost:5058", "https://*:7058", "http://*:5058");*/
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:4200", "http://localhost:60001")
+                builder.WithOrigins("http://localhost:4200", "http://localhost:60001",)
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
