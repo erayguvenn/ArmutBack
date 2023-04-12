@@ -17,7 +17,7 @@ namespace ArmutReborn
             /* builder.WebHost.UseUrls("https://localhost:7058", "http://localhost:5058", "https://*:7058", "http://*:5058");*/
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:4200", "*")
+                builder.WithOrigins("http://localhost:4200", "http://localhost:60001")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
@@ -35,7 +35,7 @@ namespace ArmutReborn
                   options.Cookie.HttpOnly = true;
                   options.Cookie.IsEssential = true;
                   options.Cookie.SameSite = SameSiteMode.None;
-                  options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
               });
 
             builder.Services.Configure<CookiePolicyOptions>(options =>
