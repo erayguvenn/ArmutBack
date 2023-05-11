@@ -30,7 +30,7 @@ namespace ArmutReborn.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql("server=3.127.53.229;uid=Eray;pwd=armut;database=Armut", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.11-mariadb"));
+                optionsBuilder.UseMySql("server=3.127.53.229;uid=Eray;pwd=armut;database=Armut", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.6.12-mariadb"));
             }
         }
 
@@ -317,6 +317,10 @@ namespace ArmutReborn.Models
                 entity.Property(e => e.ParentId)
                     .HasColumnType("int(10) unsigned")
                     .HasColumnName("parent_id");
+
+                entity.Property(e => e.PictureUrl)
+                    .HasColumnName("pictureUrl")
+                    .HasDefaultValueSql("'https://ff1bb85a87a77646636f277e08ace348fb50bfb08550ab9df4abf15-apidata.googleusercontent.com/download/storage/v1/b/hizmetim-image/o/00228-palyaco.webp?jk=ARTXCFFhurD43x1x5N3myqotpOsO0a83IsS130HvXtLsteEqfIWWDpxEsaQ2klhIFZUZWGhcdH-efItW1e_2gfBhEDvE-2IxzBtQ8FrK2R8IPnCupf0TL-4Hezg5nEy8RZ8QALAb4cCJvGhSDtZDBCxw1vwWTltEPQCsA5qxJasUWvK6_73EqSjRAYq_RFUEo7AvcosLWz6yCS0dolHZBvw9GNBh8wOB8REi1vw2eg_n5uK7shM8GZNFn8bG2DGYMpxfj_upfoxONSFjOAqN3EwhivvpsAQOwpj3_gJsDTHIr-UMLJ8tu9jJZWEX-5tPSYnzeJOgde8nETd0OIMhe6k0VDpU_uUMIKc5ZBvyZB-8SnlrnT13PTek8AZwDH-K2vdHeNP5FPsPB0Hk1hcieUrSzdJpfewYFjn_Pawuya7tRdp638xnPj4RRr7lyLv2rLsmAF26LtrILfGdhxXCd9arWRiUxIXRYWQZW_8_NQjCZLyw65qdCs8GDBZTB1qem9uHKPVTvR-aevWTrgANIKD_BWL2zbirrkSLTlYOyPvXLGzwDx6w1HCeWt9VWHbtevu7HFIWPGFJNHEVWydhwqzpccxllmGpZabgd25OlXe8eLaVnszchAh-YDNmPX8GPebvUDwWAAjRBnLJqJpPE9EHhPsZZ2QvfqNOL_oE2MXty6uACLRLZu39SDUPb-gyV0jzmA881RhCwlt3QkuuTUamPrG9Q80mK4SjaQTAbiD3t7KaQ3OxSlJ-1ELvixoerNcGrZKPWjUQMbxx6W_zrBaIjQVvkPzhBwnOoym89KDTDrXUlIbPYsyU6dWlaIp3qbrscrA2zXm8ZoUCNd6cQ1y5T9FuCQTweWoxBgfLJSRGty4or59yHbB6kPeal98VVJBDWrfJJLtNGwyfEwwr_om6aLNbirGWOjdHzqmHwN4TOjgdAmK33DcRjVGHzhhaOwFGwX4lIkhPn4zBa8pjcyrvQ-7OcVjewiuCLILSgF5Qz1usI0Uwwd_2VjtUdMdbAX2r8pvBKEdIWuTxn0PsfCeBywPZrgkhR-zP1nyco341xspRxEjYziEr6-1x-o5wWhg43qURwmRdMD1DU1hD4ZXDJAfsFigYhfMQzqmsWKwCQr-qrQBRMqJc9oLKYpHnvjBuU1cwyuwhxXHkO_Nf7Y_f6_BwLgTJLJSjn0Rr30VjUAIw8ya9A090-hxZfSCQaoSePeW-&isca=1'");
 
                 entity.Property(e => e.RuleTemplate)
                     .HasColumnName("rule_template")
