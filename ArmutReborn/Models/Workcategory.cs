@@ -15,6 +15,7 @@ namespace ArmutReborn.Models
         public string Name { get; set; } = null!;
         public uint? ParentId { get; set; }
         public string RuleTemplate { get; set; } = null!;
+        public string PictureUrl { get; set; } = null!;
 
         public virtual Workcategory? Parent { get; set; }
         public virtual ICollection<Workcategory> InverseParent { get; set; }
